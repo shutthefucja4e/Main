@@ -52,7 +52,7 @@ Tab:CreateToggle({
                 local args = {
                     [1] = ball
                 }
-                local event = game:GetService("ReplicatedStorage"):FindFirstChild("BeachBallClicked")
+                local event = game:GetService("ReplicatedStorage"):FindFirstChild("BeachBallClicker")
                 if event then
                     event:FireServer(unpack(args))
                     print("Interacted with", ball.Name)
