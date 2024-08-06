@@ -55,7 +55,7 @@ local function createNotification(title, text, duration)
     gui:Destroy()
 end
 
-createNotification("StedHub", "Загружен скрипт loader.lua", 5)
+createNotification("StedHub", "Loader.lua included", 5)
 
 print("o_o")
 print("StedHub -> Loader success included!")
