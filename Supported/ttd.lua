@@ -18,4 +18,4 @@ Oᴜʀ ᴅɪsᴄᴏʀᴅ (sᴜᴘᴘᴏʀᴛ, ᴜᴘᴅᴀᴛᴇs, ɴᴇᴡ sᴄ
 
 ]]--
 
-print("StedHub -> Toilet Tower Defense script loaded!")
+print("StedHub -> Toilet Tower Defense script loaded! (✅)")
