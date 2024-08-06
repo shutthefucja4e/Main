@@ -68,6 +68,7 @@ if placeId == 5041144419 then
     print("StedHub -> Game supported. Defined as: SCP: Roleplay (✅)")
     print("o_o")
     loadstring(game:HttpGet("https://raw.githubusercontent.com/shutthefucja4e/Main/Supported/scp.lua"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/shutthefucja4e/Main/main/Supported/scpMod.lua"))()
 elseif placeId == 13775256536 then
     print("o_o")
     print("StedHub -> Game supported. Defined as: Toilet Tower Defense (✅)")
