@@ -21,7 +21,7 @@ print("StedHub -> Script for your game loaded! (✅)")
 local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/SiriusSoftwareLtd/Rayfield/main/source.lua'))()
 
 local Window = Rayfield:CreateWindow({
-   Name = "StedHub -> TTD",
+   Name = "StedHub -> TITIDA",
    LoadingTitle = "Loading...",
    LoadingSubtitle = "by stedpredm",
 })
