@@ -23,4 +23,4 @@ print("StedHub -> Wait script implemented in your place!")
 print("StedHub -> If nothing appears, then your place is not supported!")
 
 warn("StedHub -> Your game not supported.")
-warn("StedHub -> Load Infinite Yield?")
+warn("StedHub -> Load Infinite Yield? (Y/N)")
