@@ -85,6 +85,8 @@ else
         print("StedHub -> You choosed not load Infinite Yield. Bye!")
         print("o_o")
     else
+        print("o_o")
         print("StedHub -> Invalid input. Exiting.")
+        print("o_o")
     end
 end
