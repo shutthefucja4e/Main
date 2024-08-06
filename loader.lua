@@ -28,3 +28,11 @@ warn("o_o")
 warn("StedHub -> Your game not supported")
 warn("StedHub -> Load Infinite Yield? (Y/N)")
 warn("o_o")
+
+print("o_o")
+print("StedHub -> You choosed load Infinite Yield. Good Luck!")
+print("o_o")
+
+print("o_o")
+print("StedHub -> You choosed not load Infinite Yield. Good Luck!")
+print("o_o")
