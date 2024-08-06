@@ -112,6 +112,36 @@ function Library.new(title)
         end
     end
 
+    function Window:CreateToggle(parent, default, callback)
+        local ToggleFrame = Instance.new("Frame")
+        local ToggleButton = Instance.new("TextButton")
+        local UICorner = Instance.new("UICorner")
+    
+        ToggleFrame.Name = "ToggleFrame"
+        ToggleFrame.Parent = parent
+        ToggleFrame.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+        ToggleFrame.Size = UDim2.new(0, 40, 0, 20)
+    
+        ToggleButton.Name = "ToggleButton"
+        ToggleButton.Parent = ToggleFrame
+        ToggleButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        ToggleButton.Size = UDim2.new(0, 18, 0, 18)
+        ToggleButton.Position = default and UDim2.new(1, -19, 0, 1) or UDim2.new(0, 1, 0, 1)
+        ToggleButton.Text = ""
+    
+        UICorner.CornerRadius = UDim.new(1, 0)
+        UICorner.Parent = ToggleFrame
+    
+        local toggled = default
+        ToggleButton.MouseButton1Click:Connect(function()
+            toggled = not toggled
+            TweenService:Create(ToggleButton, TweenInfo.new(0.2), {Position = toggled and UDim2.new(1, -19, 0, 1) or UDim2.new(0, 1, 0, 1)}):Play()
+            callback(toggled)
+        end)
+    
+        return ToggleFrame
+    end
+
     function Window:CreateSettingsMenu()
         local SettingsMenu = Instance.new("Frame")
         local UICorner = Instance.new("UICorner")
@@ -440,36 +470,6 @@ function Library.new(title)
         end
     
         return Tab
-    end
-    
-    function Window:CreateToggle(parent, default, callback)
-        local ToggleFrame = Instance.new("Frame")
-        local ToggleButton = Instance.new("TextButton")
-        local UICorner = Instance.new("UICorner")
-    
-        ToggleFrame.Name = "ToggleFrame"
-        ToggleFrame.Parent = parent
-        ToggleFrame.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-        ToggleFrame.Size = UDim2.new(0, 40, 0, 20)
-    
-        ToggleButton.Name = "ToggleButton"
-        ToggleButton.Parent = ToggleFrame
-        ToggleButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-        ToggleButton.Size = UDim2.new(0, 18, 0, 18)
-        ToggleButton.Position = default and UDim2.new(1, -19, 0, 1) or UDim2.new(0, 1, 0, 1)
-        ToggleButton.Text = ""
-    
-        UICorner.CornerRadius = UDim.new(1, 0)
-        UICorner.Parent = ToggleFrame
-    
-        local toggled = default
-        ToggleButton.MouseButton1Click:Connect(function()
-            toggled = not toggled
-            TweenService:Create(ToggleButton, TweenInfo.new(0.2), {Position = toggled and UDim2.new(1, -19, 0, 1) or UDim2.new(0, 1, 0, 1)}):Play()
-            callback(toggled)
-        end)
-    
-        return ToggleFrame
     end
     
     function Window:CreateColorPicker(default, callback)
