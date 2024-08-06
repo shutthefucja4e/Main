@@ -1,4 +1,4 @@
-local SteadHub = {}
+local Library = {}
 
 -- Utility functions
 local function createGradientBorder(frame)
@@ -19,50 +19,46 @@ local function tween(object, properties, duration)
     return tween
 end
 
--- Loading Menu
-local function createLoadingMenu()
+-- Loading Screen
+function Library:CreateLoadingScreen()
     local screenGui = Instance.new("ScreenGui")
-    screenGui.Name = "LoadingMenu"
+    screenGui.Name = "LoadingScreen"
     screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
     local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(0, 200, 0, 250)
-    frame.Position = UDim2.new(0.5, -100, 0.5, -125)
-    frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    frame.Size = UDim2.new(0, 400, 0, 300)
+    frame.Position = UDim2.new(0.5, -200, 0.5, -150)
+    frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
     frame.BorderSizePixel = 0
     frame.Parent = screenGui
 
+    createGradientBorder(frame)
+
     local title = Instance.new("TextLabel")
-    title.Size = UDim2.new(1, 0, 0, 30)
-    title.Position = UDim2.new(0, 0, 0, 10)
+    title.Size = UDim2.new(1, 0, 0, 50)
+    title.Position = UDim2.new(0, 0, 0, 20)
     title.BackgroundTransparency = 1
     title.Font = Enum.Font.GothamBold
     title.TextColor3 = Color3.fromRGB(255, 255, 255)
-    title.TextSize = 18
+    title.TextSize = 24
     title.Text = "Stead Hub"
     title.Parent = frame
 
-    local image = Instance.new("ImageLabel")
-    image.Size = UDim2.new(0, 100, 0, 100)
-    image.Position = UDim2.new(0.5, -50, 0, 50)
-    image.BackgroundTransparency = 1
-    image.Image = "rbxassetid://0" -- Replace with your image ID
-    image.Parent = frame
-
     local status = Instance.new("TextLabel")
-    status.Size = UDim2.new(1, 0, 0, 20)
-    status.Position = UDim2.new(0, 0, 1, -50)
+    status.Size = UDim2.new(1, -40, 0, 30)
+    status.Position = UDim2.new(0, 20, 1, -80)
     status.BackgroundTransparency = 1
     status.Font = Enum.Font.Gotham
     status.TextColor3 = Color3.fromRGB(200, 200, 200)
-    status.TextSize = 14
-    status.Text = "UI Initialization"
+    status.TextSize = 16
+    status.Text = "Initializing..."
+    status.TextXAlignment = Enum.TextXAlignment.Left
     status.Parent = frame
 
     local progressBarBg = Instance.new("Frame")
-    progressBarBg.Size = UDim2.new(0.9, 0, 0, 10)
-    progressBarBg.Position = UDim2.new(0.05, 0, 1, -20)
-    progressBarBg.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    progressBarBg.Size = UDim2.new(1, -40, 0, 10)
+    progressBarBg.Position = UDim2.new(0, 20, 1, -40)
+    progressBarBg.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
     progressBarBg.BorderSizePixel = 0
     progressBarBg.Parent = frame
 
@@ -72,8 +68,6 @@ local function createLoadingMenu()
     progressBar.BorderSizePixel = 0
     progressBar.Parent = progressBarBg
 
-    createGradientBorder(frame)
-
     return {
         ScreenGui = screenGui,
         StatusLabel = status,
@@ -81,67 +75,34 @@ local function createLoadingMenu()
     }
 end
 
--- Notification
-local function createNotification(text)
-    local screenGui = Instance.new("ScreenGui")
-    screenGui.Name = "Notification"
-    screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-
-    local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(0, 200, 0, 50)
-    frame.Position = UDim2.new(1, -220, 1, -70)
-    frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    frame.BorderSizePixel = 0
-    frame.Parent = screenGui
-
-    local label = Instance.new("TextLabel")
-    label.Size = UDim2.new(1, -20, 1, 0)
-    label.Position = UDim2.new(0, 10, 0, 0)
-    label.BackgroundTransparency = 1
-    label.Font = Enum.Font.Gotham
-    label.TextColor3 = Color3.fromRGB(255, 255, 255)
-    label.TextSize = 14
-    label.Text = text
-    label.TextWrapped = true
-    label.Parent = frame
-
-    createGradientBorder(frame)
-
-    tween(frame, {Position = UDim2.new(1, -220, 1, -70)}, 0.5)
-    wait(3)
-    tween(frame, {Position = UDim2.new(1, 20, 1, -70)}, 0.5).Completed:Connect(function()
-        screenGui:Destroy()
-    end)
-end
-
 -- Main Menu
-local function createMainMenu()
+function Library:CreateMainMenu()
     local screenGui = Instance.new("ScreenGui")
     screenGui.Name = "SteadHubMainMenu"
     screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
     local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(0, 400, 0, 300)
-    frame.Position = UDim2.new(0.5, -200, 0.5, -150)
-    frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    frame.Size = UDim2.new(0, 600, 0, 400)
+    frame.Position = UDim2.new(0.5, -300, 0.5, -200)
+    frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
     frame.BorderSizePixel = 0
     frame.ClipsDescendants = true
     frame.Parent = screenGui
 
+    createGradientBorder(frame)
+
     local tabsFrame = Instance.new("Frame")
     tabsFrame.Size = UDim2.new(0.3, 0, 1, 0)
-    tabsFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    tabsFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
     tabsFrame.BorderSizePixel = 0
     tabsFrame.Parent = frame
 
     local contentFrame = Instance.new("Frame")
     contentFrame.Size = UDim2.new(0.7, 0, 1, 0)
     contentFrame.Position = UDim2.new(0.3, 0, 0, 0)
-    contentFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    contentFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
     contentFrame.BorderSizePixel = 0
     contentFrame.Parent = frame
-
-    createGradientBorder(frame)
 
     local uiCorner = Instance.new("UICorner")
     uiCorner.CornerRadius = UDim.new(0, 10)
@@ -150,22 +111,23 @@ local function createMainMenu()
     -- Animation
     frame.Size = UDim2.new(0, 0, 0, 0)
     frame.Position = UDim2.new(0.5, 0, 0.5, 0)
-    tween(frame, {Size = UDim2.new(0, 400, 0, 300), Position = UDim2.new(0.5, -200, 0.5, -150)}, 0.5)
+    tween(frame, {Size = UDim2.new(0, 600, 0, 400), Position = UDim2.new(0.5, -300, 0.5, -200)}, 0.5)
 
     local function createTab(name)
         local button = Instance.new("TextButton")
-        button.Size = UDim2.new(1, 0, 0, 30)
-        button.Position = UDim2.new(0, 0, 0, #tabsFrame:GetChildren() * 30)
-        button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+        button.Size = UDim2.new(1, 0, 0, 40)
+        button.Position = UDim2.new(0, 0, 0, #tabsFrame:GetChildren() * 40)
+        button.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
         button.BorderSizePixel = 0
-        button.Font = Enum.Font.Gotham
-        button.TextColor3 = Color3.fromRGB(255, 255, 255)
+        button.Font = Enum.Font.GothamSemibold
+        button.TextColor3 = Color3.fromRGB(200, 200, 200)
         button.TextSize = 14
         button.Text = name
         button.Parent = tabsFrame
 
         local container = Instance.new("ScrollingFrame")
-        container.Size = UDim2.new(1, 0, 1, 0)
+        container.Size = UDim2.new(1, -20, 1, -20)
+        container.Position = UDim2.new(0, 10, 0, 10)
         container.BackgroundTransparency = 1
         container.BorderSizePixel = 0
         container.ScrollBarThickness = 4
@@ -184,40 +146,42 @@ local function createMainMenu()
 
     local function createSlider(container, name, min, max, default)
         local frame = Instance.new("Frame")
-        frame.Size = UDim2.new(1, -20, 0, 50)
-        frame.Position = UDim2.new(0, 10, 0, #container:GetChildren() * 60)
+        frame.Size = UDim2.new(1, 0, 0, 60)
+        frame.Position = UDim2.new(0, 0, 0, #container:GetChildren() * 70)
         frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
         frame.BorderSizePixel = 0
         frame.Parent = container
 
         local label = Instance.new("TextLabel")
-        label.Size = UDim2.new(1, 0, 0, 20)
+        label.Size = UDim2.new(1, -20, 0, 20)
+        label.Position = UDim2.new(0, 10, 0, 5)
         label.BackgroundTransparency = 1
-        label.Font = Enum.Font.Gotham
-        label.TextColor3 = Color3.fromRGB(255, 255, 255)
+        label.Font = Enum.Font.GothamSemibold
+        label.TextColor3 = Color3.fromRGB(200, 200, 200)
         label.TextSize = 14
         label.Text = name
+        label.TextXAlignment = Enum.TextXAlignment.Left
         label.Parent = frame
 
         local sliderBg = Instance.new("Frame")
-        sliderBg.Size = UDim2.new(1, 0, 0, 10)
-        sliderBg.Position = UDim2.new(0, 0, 0, 30)
+        sliderBg.Size = UDim2.new(1, -20, 0, 6)
+        sliderBg.Position = UDim2.new(0, 10, 0, 35)
         sliderBg.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
         sliderBg.BorderSizePixel = 0
         sliderBg.Parent = frame
 
         local sliderFill = Instance.new("Frame")
         sliderFill.Size = UDim2.new((default - min) / (max - min), 0, 1, 0)
-        sliderFill.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+        sliderFill.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
         sliderFill.BorderSizePixel = 0
         sliderFill.Parent = sliderBg
 
         local valueLabel = Instance.new("TextLabel")
         valueLabel.Size = UDim2.new(0, 50, 0, 20)
-        valueLabel.Position = UDim2.new(1, -50, 0, 0)
+        valueLabel.Position = UDim2.new(1, -60, 0, 5)
         valueLabel.BackgroundTransparency = 1
-        valueLabel.Font = Enum.Font.Gotham
-        valueLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+        valueLabel.Font = Enum.Font.GothamSemibold
+        valueLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
         valueLabel.TextSize = 14
         valueLabel.Text = tostring(default)
         valueLabel.Parent = frame
@@ -251,82 +215,20 @@ local function createMainMenu()
         return function() return value end
     end
 
-    local function createDropdown(container, name, options)
-        local frame = Instance.new("Frame")
-        frame.Size = UDim2.new(1, -20, 0, 50)
-        frame.Position = UDim2.new(0, 10, 0, #container:GetChildren() * 60)
-        frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-        frame.BorderSizePixel = 0
-        frame.Parent = container
-
-        local label = Instance.new("TextLabel")
-        label.Size = UDim2.new(1, 0, 0, 20)
-        label.BackgroundTransparency = 1
-        label.Font = Enum.Font.Gotham
-        label.TextColor3 = Color3.fromRGB(255, 255, 255)
-        label.TextSize = 14
-        label.Text = name
-        label.Parent = frame
-
-        local dropdownButton = Instance.new("TextButton")
-        dropdownButton.Size = UDim2.new(1, 0, 0, 30)
-        dropdownButton.Position = UDim2.new(0, 0, 0, 20)
-        dropdownButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-        dropdownButton.BorderSizePixel = 0
-        dropdownButton.Font = Enum.Font.Gotham
-        dropdownButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-        dropdownButton.TextSize = 14
-        dropdownButton.Text = options[1]
-        dropdownButton.Parent = frame
-
-        local dropdownFrame = Instance.new("Frame")
-        dropdownFrame.Size = UDim2.new(1, 0, 0, #options * 30)
-        dropdownFrame.Position = UDim2.new(0, 0, 1, 0)
-        dropdownFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-        dropdownFrame.BorderSizePixel = 0
-        dropdownFrame.Visible = false
-        dropdownFrame.ZIndex = 10
-        dropdownFrame.Parent = dropdownButton
-
-        for i, option in ipairs(options) do
-            local optionButton = Instance.new("TextButton")
-            optionButton.Size = UDim2.new(1, 0, 0, 30)
-            optionButton.Position = UDim2.new(0, 0, 0, (i-1) * 30)
-            optionButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-            optionButton.BorderSizePixel = 0
-            optionButton.Font = Enum.Font.Gotham
-            optionButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-            optionButton.TextSize = 14
-            optionButton.Text = option
-            optionButton.ZIndex = 11
-            optionButton.Parent = dropdownFrame
-
-            optionButton.MouseButton1Click:Connect(function()
-                dropdownButton.Text = option
-                dropdownFrame.Visible = false
-            end)
-        end
-
-        dropdownButton.MouseButton1Click:Connect(function()
-            dropdownFrame.Visible = not dropdownFrame.Visible
-        end)
-
-        return function() return dropdownButton.Text end
-    end
-
     local function createToggle(container, name, default)
         local frame = Instance.new("Frame")
-        frame.Size = UDim2.new(1, -20, 0, 30)
-        frame.Position = UDim2.new(0, 10, 0, #container:GetChildren() * 40)
+        frame.Size = UDim2.new(1, 0, 0, 40)
+        frame.Position = UDim2.new(0, 0, 0, #container:GetChildren() * 50)
         frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
         frame.BorderSizePixel = 0
         frame.Parent = container
 
         local label = Instance.new("TextLabel")
-        label.Size = UDim2.new(0.7, 0, 1, 0)
+        label.Size = UDim2.new(1, -60, 1, 0)
+        label.Position = UDim2.new(0, 10, 0, 0)
         label.BackgroundTransparency = 1
-        label.Font = Enum.Font.Gotham
-        label.TextColor3 = Color3.fromRGB(255, 255, 255)
+        label.Font = Enum.Font.GothamSemibold
+        label.TextColor3 = Color3.fromRGB(200, 200, 200)
         label.TextSize = 14
         label.Text = name
         label.TextXAlignment = Enum.TextXAlignment.Left
@@ -335,7 +237,7 @@ local function createMainMenu()
         local toggleButton = Instance.new("TextButton")
         toggleButton.Size = UDim2.new(0, 40, 0, 20)
         toggleButton.Position = UDim2.new(1, -50, 0.5, -10)
-        toggleButton.BackgroundColor3 = default and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+        toggleButton.BackgroundColor3 = default and Color3.fromRGB(0, 170, 255) or Color3.fromRGB(60, 60, 60)
         toggleButton.BorderSizePixel = 0
         toggleButton.Text = ""
         toggleButton.Parent = frame
@@ -345,21 +247,21 @@ local function createMainMenu()
         uiCorner.Parent = toggleButton
 
         local toggleCircle = Instance.new("Frame")
-        toggleCircle.Size = UDim2.new(0, 20, 0, 20)
-        toggleCircle.Position = default and UDim2.new(1, -20, 0, 0) or UDim2.new(0, 0, 0, 0)
+        toggleCircle.Size = UDim2.new(0, 16, 0, 16)
+        toggleCircle.Position = default and UDim2.new(1, -18, 0.5, -8) or UDim2.new(0, 2, 0.5, -8)
         toggleCircle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         toggleCircle.BorderSizePixel = 0
         toggleCircle.Parent = toggleButton
 
         local uiCorner = Instance.new("UICorner")
-        uiCorner.CornerRadius = UDim.new(0, 10)
+        uiCorner.CornerRadius = UDim.new(0, 8)
         uiCorner.Parent = toggleCircle
 
         local toggled = default
         toggleButton.MouseButton1Click:Connect(function()
             toggled = not toggled
-            toggleButton.BackgroundColor3 = toggled and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
-            tween(toggleCircle, {Position = toggled and UDim2.new(1, -20, 0, 0) or UDim2.new(0, 0, 0, 0)}, 0.2)
+            toggleButton.BackgroundColor3 = toggled and Color3.fromRGB(0, 170, 255) or Color3.fromRGB(60, 60, 60)
+            tween(toggleCircle, {Position = toggled and UDim2.new(1, -18, 0.5, -8) or UDim2.new(0, 2, 0.5, -8)}, 0.2)
         end)
 
         return function() return toggled end
@@ -368,38 +270,8 @@ local function createMainMenu()
     return {
         CreateTab = createTab,
         CreateSlider = createSlider,
-        CreateDropdown = createDropdown,
         CreateToggle = createToggle,
     }
 end
 
-function SteadHub.init()
-    local loadingMenu = createLoadingMenu()
-    
-    for i = 1, 100 do
-        wait(0.05)
-        loadingMenu.StatusLabel.Text = "UI Initialization [Downloading " .. i .. "%]"
-        loadingMenu.ProgressBar.Size = UDim2.new(i/100, 0, 1, 0)
-    end
-    
-    loadingMenu.ScreenGui:Destroy()
-    
-    createNotification("Stead Hub: Successfully loaded!")
-    
-    local mainMenu = createMainMenu()
-    
-    -- Example usage:
-    local generalTab = mainMenu.CreateTab("General")
-    local visualsTab = mainMenu.CreateTab("Visuals")
-    
-    mainMenu.CreateSlider(generalTab, "Walk Speed", 16, 100, 16)
-    mainMenu.CreateDropdown(generalTab, "Team", {"Red", "Blue", "Green"})
-    mainMenu.CreateToggle(generalTab, "Infinite Jump", false)
-    
-    mainMenu.CreateSlider(visualsTab, "FOV", 70, 120, 90)
-    mainMenu.CreateToggle(visualsTab, "ESP", false)
-    
-    return mainMenu
-end
-
-return SteadHub
+return Library
