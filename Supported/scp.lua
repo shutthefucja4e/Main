@@ -18,4 +18,4 @@ Oᴜʀ ᴅɪsᴄᴏʀᴅ (sᴜᴘᴘᴏʀᴛ, ᴜᴘᴅᴀᴛᴇs, ɴᴇᴡ sᴄ
 
 ]]--
 
-print("StedHub -> SCP: RolePlay script loaded!")
+print("StedHub -> SCP: RolePlay script loaded! (✅)")
