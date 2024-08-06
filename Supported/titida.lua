@@ -35,21 +35,26 @@ Tab:CreateToggle({
    Callback = function(Value)
       while Value do
          local beachBalls = {
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.BeachBall.BeachBallClicker,
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.BlueBeachBall.BeachBallClicker,
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.CyanBeachBall.BeachBallClicker,
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.DeepBlueBeachBall.BeachBallClicker,
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.GreenBeachBall.BeachBallClicker,
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.OrangeBeachBall.BeachBallClicker,
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.PinkBeachBall.BeachBallClicker,
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.PurpleBeachBall.BeachBallClicker,
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.RedBeachBall.BeachBallClicker,
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.YellowBeachBall.BeachBallClicker
+            game.Workspace.Worlds.Lobby.HiddenBeachBalls.BeachBall["Beachball LVL3-4.002"],
+            game.Workspace.Worlds.Lobby.HiddenBeachBalls.BlueBeachBall["Beachball LVL3-4.002"],
+            game.Workspace.Worlds.Lobby.HiddenBeachBalls.CyanBeachBall["Beachball LVL3-4.002"],
+            game.Workspace.Worlds.Lobby.HiddenBeachBalls.DeepBlueBeachBall["Beachball LVL3-4.002"],
+            game.Workspace.Worlds.Lobby.HiddenBeachBalls.GreenBeachBall["Beachball LVL3-4.002"],
+            game.Workspace.Worlds.Lobby.HiddenBeachBalls.OrangeBeachBall["Beachball LVL3-4.002"],
+            game.Workspace.Worlds.Lobby.HiddenBeachBalls.PinkBeachBall["Beachball LVL3-4.002"],
+            game.Workspace.Worlds.Lobby.HiddenBeachBalls.PurpleBeachBall["Beachball LVL3-4.002"],
+            game.Workspace.Worlds.Lobby.HiddenBeachBalls.RedBeachBall["Beachball LVL3-4.002"],
+            game.Workspace.Worlds.Lobby.HiddenBeachBalls.YellowBeachBall["Beachball LVL3-4.002"]
          }
          
-         for _, clicker in ipairs(beachBalls) do
-            if clicker and clicker:IsA("ClickDetector") then
-                fireclickdetector(clicker)
+         for _, ball in ipairs(beachBalls) do
+            if ball then
+                -- Симулируем нажатие левой кнопкой мыши
+                local args = {
+                    [1] = ball
+                }
+                game:GetService("ReplicatedStorage").Remotes.ClickBeachBall:FireServer(unpack(args))
+                print("Clicked on", ball.Name)
             end
          end
          wait(1)
