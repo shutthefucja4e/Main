@@ -89,4 +89,6 @@ else
         print("StedHub -> Invalid input. Exiting.")
         print("o_o")
     end
+    
+    return
 end
