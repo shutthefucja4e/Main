@@ -16,7 +16,7 @@ Oᴜʀ ᴅɪsᴄᴏʀᴅ (sᴜᴘᴘᴏʀᴛ, ᴜᴘᴅᴀᴛᴇs, ɴᴇᴡ sᴄ
 
 ]]--
 
-warn("StedHub -> SCP: RolePlay ModDetector script loaded! (✅)")
+warn("StedHub -> ModDetector script loaded! (✅)")
 warn("StedHub -> Success! Mods offline. Good Luck!")
 
 local Players = game:GetService("Players")
