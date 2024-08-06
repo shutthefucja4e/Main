@@ -49,12 +49,27 @@ Tab:CreateToggle({
          
          for _, ball in ipairs(beachBalls) do
             if ball then
-                -- Симулируем нажатие левой кнопкой мыши
-                local args = {
-                    [1] = ball
-                }
-                game:GetService("ReplicatedStorage").Remotes.ClickBeachBall:FireServer(unpack(args))
-                print("Clicked on", ball.Name)
+                -- Попытка найти ClickDetector
+                local clickDetector = ball:FindFirstChildOfClass("ClickDetector")
+                if clickDetector then
+                    fireclickdetector(clickDetector)
+                    print("Clicked on", ball.Name)
+                else
+                    -- Если ClickDetector не найден, пробуем симулировать клик другим способом
+                    local player = game.Players.LocalPlayer
+                    local character = player.Character
+                    if character and character:FindFirstChild("HumanoidRootPart") then
+                        local humanoidRootPart = character.HumanoidRootPart
+                        local A_1 = ball
+                        local Event = game:GetService("ReplicatedStorage"):FindFirstChild("ClickBeachBall")
+                        if Event then
+                            Event:FireServer(A_1)
+                            print("Fired event for", ball.Name)
+                        else
+                            print("ClickBeachBall event not found")
+                        end
+                    end
+                end
             end
          end
          wait(1)
