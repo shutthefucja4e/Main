@@ -3235,48 +3235,107 @@ for i, v in pairs(UILibNames) do
     UILibrary[v].__index = UILibrary[v]
 end
 
-function UILibrary.new(gameName, userId, rank)
+function UILibrary.new(gameName)
+    local Players = game:GetService("Players")
+    local Player = Players.LocalPlayer
+    local UserInputService = game:GetService("UserInputService")
+    local HttpService = game:GetService("HttpService")
+    local RunService = game:GetService("RunService")
+
     local GUI = Instance.new("ScreenGui")
     GUI.Name = HttpService:GenerateGUID(false)
-    GUI.Parent =
-        RunService:IsStudio() == false and game:GetService("CoreGui") or LocalPlayer:WaitForChild("PlayerGui")
+    GUI.Parent = RunService:IsStudio() == false and game:GetService("CoreGui") or Player:WaitForChild("PlayerGui")
     GUI.ResetOnSpawn = false
     GUI.ZIndexBehavior = Enum.ZIndexBehavior.Global
 
     local window = objectGenerator.new("Window")
     window.Parent = GUI
 
-    --// make UI draggable
-    -->> LogoHitbox
-
+    -- Делаем UI перетаскиваемым
     local Frame = Instance.new("Frame")
     Frame.BackgroundTransparency = 1
     Frame.Size = UDim2.fromScale(2, 2)
-
     Frame.AnchorPoint = Vector2.new(0.5, 0.5)
     Frame.Position = UDim2.fromScale(.5, .5)
-
     local AspectRatio = Instance.new("UIAspectRatioConstraint", Frame)
     AspectRatio.AspectRatio = 1.2
-
     Frame.Parent = window.MainUI.Sidebar.ContentHolder.Cheats.Logo
     Frame.ZIndex = 300
-
     local Drag = Draggable.Drag(window.MainUI, Frame)
 
-    --// Customize the GUI
-    window.Watermark.Text = ("hydrahub v2 | %s | %s"):format(userId, gameName)
+    -- Добавляем аватар пользователя
+    local avatarImage = Instance.new("ImageLabel")
+    avatarImage.Size = UDim2.new(0, 40, 0, 40)
+    avatarImage.Position = UDim2.new(0, 10, 0, 10)
+    avatarImage.AnchorPoint = Vector2.new(0, 0.5)
+    avatarImage.BackgroundTransparency = 1
+    avatarImage.Image = Players:GetUserThumbnailAsync(Player.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size420x420)
+    avatarImage.Parent = window.MainUI.Sidebar.ContentHolder.UserInfo
+
+    -- Обновляем информацию о пользователе
     local userinfo = window.MainUI.Sidebar.ContentHolder.UserInfo.Content
-    userinfo.Rank.Text = rank
-    userinfo.Title.Text = userId
+    userinfo.Rank.Text = "Developer"
+    userinfo.Title.Text = "Nick: " .. Player.Name
+
+    -- Добавляем функцию скрытия/показа UI по правому клику
+    UserInputService.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton2 then
+            window.MainUI.Visible = not window.MainUI.Visible
+        end
+    end)
+
+    -- Добавляем кнопку выгрузки скрипта
+    local unloadButton = Instance.new("TextButton")
+    unloadButton.Size = UDim2.new(0, 80, 0, 30)
+    unloadButton.Position = UDim2.new(1, -90, 0, 10)
+    unloadButton.BackgroundColor3 = Color3.new(0.2, 0.2, 0.2)
+    unloadButton.Text = "Unload"
+    unloadButton.TextColor3 = Color3.new(1, 1, 1)
+    unloadButton.Parent = window.MainUI
+
+    local function unloadScript()
+        GUI:Destroy()
+        -- Здесь нужно добавить код для отключения всех включенных функций
+    end
+
+    unloadButton.MouseButton1Click:Connect(function()
+        local confirmationPrompt = Instance.new("Frame")
+        confirmationPrompt.Size = UDim2.new(0, 200, 0, 100)
+        confirmationPrompt.Position = UDim2.new(0.5, -100, 0.5, -50)
+        confirmationPrompt.BackgroundColor3 = Color3.new(0.2, 0.2, 0.2)
+        confirmationPrompt.Parent = window.MainUI
+
+        local promptText = Instance.new("TextLabel")
+        promptText.Size = UDim2.new(1, 0, 0.5, 0)
+        promptText.Text = "Unload Script?"
+        promptText.Parent = confirmationPrompt
+
+        local yesButton = Instance.new("TextButton")
+        yesButton.Size = UDim2.new(0.4, 0, 0.3, 0)
+        yesButton.Position = UDim2.new(0.1, 0, 0.6, 0)
+        yesButton.Text = "Yes"
+        yesButton.Parent = confirmationPrompt
+
+        local noButton = Instance.new("TextButton")
+        noButton.Size = UDim2.new(0.4, 0, 0.3, 0)
+        noButton.Position = UDim2.new(0.5, 0, 0.6, 0)
+        noButton.Text = "No"
+        noButton.Parent = confirmationPrompt
+
+        yesButton.MouseButton1Click:Connect(function()
+            unloadScript()
+        end)
+
+        noButton.MouseButton1Click:Connect(function()
+            confirmationPrompt:Destroy()
+        end)
+    end)
 
     return setmetatable(
         {
             UI = {},
             windowInfo = {
                 gameName = gameName,
-                userId = userId,
-                rank = rank
             },
             currentSelection = nil,
             currentCategorySelection = nil,
