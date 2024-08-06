@@ -64,9 +64,9 @@ print("StedHub -> If nothing appears, then your place is not supported!")
 print("o_o")
 
 if placeId == 5041144419 then
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/123/scp.lua"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/shutthefucja4e/Main/Supported/scp.lua"))()
 elseif placeId == 13775256536 then
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/123/ttd.lua"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/shutthefucja4e/Main/Supported/ttd.lua"))()
 else
     warn("o_o")
     warn("StedHub -> Your game not supported")
@@ -76,7 +76,7 @@ else
     local input = string.upper(string.sub(tostring(game:GetService("Players").LocalPlayer.Chatted:Wait()), 1, 1))
     
     if input == "Y" then
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/123/yield.lua"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/shutthefucja4e/Main/Yield/yield.lua"))()
         print("o_o")
         print("StedHub -> You choosed load Infinite Yield. Good Luck!")
         print("o_o")
