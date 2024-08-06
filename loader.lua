@@ -21,3 +21,6 @@ Oᴜʀ ᴅɪsᴄᴏʀᴅ (sᴜᴘᴘᴏʀᴛ, ᴜᴘᴅᴀᴛᴇs, ɴᴇᴡ sᴄ
 print("StedHub -> Loader success included!")
 print("StedHub -> Wait script implemented in your place!")
 print("StedHub -> If nothing appears, then your place is not supported!")
+
+warn("StedHub -> Your game not supported.")
+warn("StedHub -> Load Infinite Yield?")
