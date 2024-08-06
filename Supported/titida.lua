@@ -19,7 +19,6 @@ Oᴜʀ ᴅɪsᴄᴏʀᴅ (sᴜᴘᴘᴏʀᴛ, ᴜᴘᴅᴀᴛᴇs, ɴᴇᴡ sᴄ
 print("StedHub -> Script for your game loaded! (✅)")
 
 local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/SiriusSoftwareLtd/Rayfield/main/source.lua'))()
-local VirtualUser = game:GetService("VirtualUser")
 
 local Window = Rayfield:CreateWindow({
    Name = "StedHub -> TITIDA",
