@@ -28,20 +28,6 @@ local Window = Rayfield:CreateWindow({
 
 local Tab = Window:CreateTab("Main", 4483362458)
 
-local function clickObject(object)
-    if object and object:IsA("BasePart") then
-        local position = object.Position
-        local screenPosition, isOnScreen = workspace.CurrentCamera:WorldToScreenPoint(position)
-        
-        if isOnScreen then
-            mouse1click()
-            print("Clicked on", object.Name)
-        else
-            print(object.Name, "is not on screen")
-        end
-    end
-end
-
 Tab:CreateToggle({
    Name = "AutoFarm LobbyUnit",
    CurrentValue = false,
@@ -49,24 +35,24 @@ Tab:CreateToggle({
    Callback = function(Value)
       while Value do
          local beachBalls = {
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.BeachBall["Beachball LVL3-4.002"],
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.BlueBeachBall["Beachball LVL3-4.002"],
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.CyanBeachBall["Beachball LVL3-4.002"],
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.DeepBlueBeachBall["Beachball LVL3-4.002"],
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.GreenBeachBall["Beachball LVL3-4.002"],
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.OrangeBeachBall["Beachball LVL3-4.002"],
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.PinkBeachBall["Beachball LVL3-4.002"],
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.PurpleBeachBall["Beachball LVL3-4.002"],
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.RedBeachBall["Beachball LVL3-4.002"],
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.YellowBeachBall["Beachball LVL3-4.002"]
+            game.Workspace.Worlds.Lobby.HiddenBeachBalls.BeachBall.BeachBallClicker,
+            game.Workspace.Worlds.Lobby.HiddenBeachBalls.BlueBeachBall.BeachBallClicker,
+            game.Workspace.Worlds.Lobby.HiddenBeachBalls.CyanBeachBall.BeachBallClicker,
+            game.Workspace.Worlds.Lobby.HiddenBeachBalls.DeepBlueBeachBall.BeachBallClicker,
+            game.Workspace.Worlds.Lobby.HiddenBeachBalls.GreenBeachBall.BeachBallClicker,
+            game.Workspace.Worlds.Lobby.HiddenBeachBalls.OrangeBeachBall.BeachBallClicker,
+            game.Workspace.Worlds.Lobby.HiddenBeachBalls.PinkBeachBall.BeachBallClicker,
+            game.Workspace.Worlds.Lobby.HiddenBeachBalls.PurpleBeachBall.BeachBallClicker,
+            game.Workspace.Worlds.Lobby.HiddenBeachBalls.RedBeachBall.BeachBallClicker,
+            game.Workspace.Worlds.Lobby.HiddenBeachBalls.YellowBeachBall.BeachBallClicker
          }
          
-         for _, ball in ipairs(beachBalls) do
-            clickObject(ball)
-            wait(0.2)  -- Небольшая задержка между кликами
+         for _, clicker in ipairs(beachBalls) do
+            if clicker and clicker:IsA("ClickDetector") then
+                fireclickdetector(clicker)
+            end
          end
-         
-         wait(1)  -- Ждем секунду перед следующим циклом
+         wait(1)
       end
    end,
 })
@@ -162,4 +148,3 @@ Tab:CreateButton({
       game:GetService("ReplicatedStorage").dataRemoteEvent:FireServer(unpack(args))
    end,
 })
-
