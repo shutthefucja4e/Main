@@ -19,6 +19,7 @@ Oᴜʀ ᴅɪsᴄᴏʀᴅ (sᴜᴘᴘᴏʀᴛ, ᴜᴘᴅᴀᴛᴇs, ɴᴇᴡ sᴄ
 print("StedHub -> Script for your game loaded! (✅)")
 
 local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/SiriusSoftwareLtd/Rayfield/main/source.lua'))()
+local VirtualUser = game:GetService("VirtualUser")
 
 local Window = Rayfield:CreateWindow({
    Name = "StedHub -> TITIDA",
@@ -27,6 +28,23 @@ local Window = Rayfield:CreateWindow({
 })
 
 local Tab = Window:CreateTab("Main", 4483362458)
+
+local function clickObject(object)
+    if object then
+        local position = object.Position
+        local screenPosition, isOnScreen = workspace.CurrentCamera:WorldToScreenPoint(position)
+        
+        if isOnScreen then
+            VirtualUser:SetMouseLocation(screenPosition.X, screenPosition.Y)
+            VirtualUser:Button1Down(Vector2.new(screenPosition.X, screenPosition.Y))
+            wait(0.1)  -- Небольшая задержка между нажатием и отпусканием
+            VirtualUser:Button1Up(Vector2.new(screenPosition.X, screenPosition.Y))
+            print("Clicked on", object.Name)
+        else
+            print(object.Name, "is not on screen")
+        end
+    end
+end
 
 Tab:CreateToggle({
    Name = "AutoFarm LobbyUnit",
@@ -48,20 +66,11 @@ Tab:CreateToggle({
          }
          
          for _, ball in ipairs(beachBalls) do
-            if ball then
-                local args = {
-                    [1] = ball
-                }
-                local event = game:GetService("ReplicatedStorage"):FindFirstChild("BeachBallClicker")
-                if event then
-                    event:FireServer(unpack(args))
-                    print("Interacted with", ball.Name)
-                else
-                    print("BeachBallClicked event not found")
-                end
-            end
+            clickObject(ball)
+            wait(0.2)  -- Небольшая задержка между кликами
          end
-         wait(1)
+         
+         wait(1)  -- Ждем секунду перед следующим циклом
       end
    end,
 })
