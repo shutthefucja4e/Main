@@ -18,9 +18,13 @@ Oᴜʀ ᴅɪsᴄᴏʀᴅ (sᴜᴘᴘᴏʀᴛ, ᴜᴘᴅᴀᴛᴇs, ɴᴇᴡ sᴄ
 
 ]]--
 
+warn("o_o")
 print("StedHub -> Loader success included!")
 print("StedHub -> Wait script implemented in your place!")
 print("StedHub -> If nothing appears, then your place is not supported!")
+warn("o_o")
 
-warn("StedHub -> Your game not supported.")
+warn("o_o")
+warn("StedHub -> Your game not supported")
 warn("StedHub -> Load Infinite Yield? (Y/N)")
+warn("o_o")
