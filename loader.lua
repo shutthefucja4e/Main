@@ -65,17 +65,17 @@ print("o_o")
 
 if placeId == 5041144419 then
     print("o_o")
-    print("StedHub -> Game supported. Defined as: SCP: Roleplay")
+    print("StedHub -> Game supported. Defined as: SCP: Roleplay (✅)")
     print("o_o")
     loadstring(game:HttpGet("https://raw.githubusercontent.com/shutthefucja4e/Main/Supported/scp.lua"))()
 elseif placeId == 13775256536 then
     print("o_o")
-    print("StedHub -> Game supported. Defined as: Toilet Tower Defense")
+    print("StedHub -> Game supported. Defined as: Toilet Tower Defense (✅)")
     print("o_o")
     loadstring(game:HttpGet("https://raw.githubusercontent.com/shutthefucja4e/Main/Supported/ttd.lua"))()
 else
     warn("o_o")
-    warn("StedHub -> Your game not supported")
+    warn("StedHub -> Your game not supported (⛔)")
     warn("StedHub -> Load Infinite Yield? (Y/N)")
     warn("o_o")
     
@@ -92,7 +92,7 @@ else
         print("o_o")
     else
         print("o_o")
-        print("StedHub -> Invalid input. Exiting.")
+        print("StedHub -> Invalid input. Exiting. (⚠️)")
         print("o_o")
     end
     
