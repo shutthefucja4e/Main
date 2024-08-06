@@ -56,45 +56,58 @@ local function createNotification(title, text, duration)
 end
 
 createNotification("StedHub", "Loader.lua included", 5)
-
+print("")
 print("o_o")
 print("StedHub -> Loader success included!")
 print("StedHub -> Wait script implemented in your place!")
 print("StedHub -> If nothing appears, then your place is not supported!")
 print("o_o")
+print("")
 
 if placeId == 5041144419 then
+    print("")
     print("o_o")
     print("StedHub -> Game supported. Defined as: SCP: Roleplay (✅)")
     print("o_o")
+    print("")
     loadstring(game:HttpGet("https://raw.githubusercontent.com/shutthefucja4e/Main/main/Supported/scp.lua"))()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/shutthefucja4e/Main/main/Supported/scpMod.lua"))()
 elseif placeId == 13775256536 then
+    print("")
     print("o_o")
     print("StedHub -> Game supported. Defined as: Toilet Tower Defense (✅)")
     print("o_o")
+    print("")
     loadstring(game:HttpGet("https://raw.githubusercontent.com/shutthefucja4e/Main/main/Supported/ttd.lua"))()
 else
+    warn("")
     warn("o_o")
     warn("StedHub -> Your game not supported (⛔)")
     warn("StedHub -> Load Infinite Yield? (Y/N)")
     warn("o_o")
+    warn("")
     
     local input = string.upper(string.sub(tostring(game:GetService("Players").LocalPlayer.Chatted:Wait()), 1, 1))
     
     if input == "Y" then
         loadstring(game:HttpGet("https://raw.githubusercontent.com/shutthefucja4e/Main/main/Yield/yield.lua"))()
+        print("")
         print("o_o")
         print("StedHub -> You choosed load Infinite Yield. Good Luck!")
         print("o_o")
+        print("")
     elseif input == "N" then
+        print("")
         print("o_o")
         print("StedHub -> You choosed dont load Infinite Yield. Bye!")
         print("o_o")
+        print("")
     else
+        print("")
         print("o_o")
         print("StedHub -> Invalid input. Exiting. (⚠️)")
         print("o_o")
+        print("")
     end
     
     return
