@@ -89,7 +89,7 @@ else
         print("o_o")
     elseif input == "N" then
         print("o_o")
-        print("StedHub -> You choosed not load Infinite Yield. Bye!")
+        print("StedHub -> You choosed dont load Infinite Yield. Bye!")
         print("o_o")
     else
         print("o_o")
