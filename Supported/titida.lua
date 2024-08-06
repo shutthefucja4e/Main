@@ -30,15 +30,12 @@ local Window = Rayfield:CreateWindow({
 local Tab = Window:CreateTab("Main", 4483362458)
 
 local function clickObject(object)
-    if object then
+    if object and object:IsA("BasePart") then
         local position = object.Position
         local screenPosition, isOnScreen = workspace.CurrentCamera:WorldToScreenPoint(position)
         
         if isOnScreen then
-            VirtualUser:SetMouseLocation(screenPosition.X, screenPosition.Y)
-            VirtualUser:Button1Down(Vector2.new(screenPosition.X, screenPosition.Y))
-            wait(0.1)  -- Небольшая задержка между нажатием и отпусканием
-            VirtualUser:Button1Up(Vector2.new(screenPosition.X, screenPosition.Y))
+            mouse1click()
             print("Clicked on", object.Name)
         else
             print(object.Name, "is not on screen")
