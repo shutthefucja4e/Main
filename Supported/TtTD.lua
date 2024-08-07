@@ -35,6 +35,7 @@ local speedSlider = Tabs.Main:AddSlider("AcceptTradeSpeed", {
 })
 
 local autoAcceptSpeed = 0.5
+local isAutoAcceptEnabled = false
 
 local speedSlider = Tabs.Main:AddSlider("AcceptTradeSpeed", {
     Title = "Auto Accept Trade Speed",
@@ -48,19 +49,18 @@ local speedSlider = Tabs.Main:AddSlider("AcceptTradeSpeed", {
     end
 })
 
-local autoAcceptTradesToggle
-
-autoAcceptTradesToggle = Tabs.Main:AddToggle("AutoAcceptTrades", {
+Tabs.Main:AddToggle("AutoAcceptTrades", {
     Title = "Auto Accept Trades",
     Default = false,
     Callback = function(Value)
+        isAutoAcceptEnabled = Value
         if Value then
             spawn(function()
-                while autoAcceptTradesToggle.Value do
+                while isAutoAcceptEnabled do
                     local args = {
                         [1] = {
                             [1] = {
-                                [1] = game:GetService("HttpService"):GenerateGUID(false),
+                                [1] = tostring(os.time() * 1000 + math.random(1, 999)),
                                 [2] = true
                             },
                             [2] = "Iw"
