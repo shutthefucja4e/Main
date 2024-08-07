@@ -34,7 +34,23 @@ local speedSlider = Tabs.Main:AddSlider("AcceptTradeSpeed", {
     end
 })
 
-local autoAcceptTradesToggle = Tabs.Main:AddToggle("AutoAcceptTrades", {
+local autoAcceptSpeed = 0.5
+
+local speedSlider = Tabs.Main:AddSlider("AcceptTradeSpeed", {
+    Title = "Auto Accept Trade Speed",
+    Description = "Set the speed for auto accepting trades (in seconds)",
+    Default = 0.5,
+    Min = 0.1,
+    Max = 5,
+    Rounding = 1,
+    Callback = function(Value)
+        autoAcceptSpeed = Value
+    end
+})
+
+local autoAcceptTradesToggle
+
+autoAcceptTradesToggle = Tabs.Main:AddToggle("AutoAcceptTrades", {
     Title = "Auto Accept Trades",
     Default = false,
     Callback = function(Value)
@@ -44,7 +60,7 @@ local autoAcceptTradesToggle = Tabs.Main:AddToggle("AutoAcceptTrades", {
                     local args = {
                         [1] = {
                             [1] = {
-                                [1] = "6330653861613934313165363436323139313866353835666434383833306561",
+                                [1] = game:GetService("HttpService"):GenerateGUID(false),
                                 [2] = true
                             },
                             [2] = "Iw"
