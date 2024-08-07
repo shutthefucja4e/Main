@@ -62,6 +62,9 @@ local UserInputService = game:GetService("UserInputService")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+
 Tabs.AutoFarm:AddToggle("AutoFarmLobby", {
     Title = "AutoFarm Lobby Unit",
     Default = false,
@@ -91,7 +94,7 @@ Tabs.AutoFarm:AddToggle("AutoFarmLobby", {
         local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
         
         local freezeConnection
-        
+
         local function freezeCharacter()
             if freezeConnection then freezeConnection:Disconnect() end
             
@@ -113,11 +116,7 @@ Tabs.AutoFarm:AddToggle("AutoFarmLobby", {
                 local beachBall = beachBalls[currentIndex]
                 if beachBall then
                     unfreezeCharacter()
-                    wait(0.1)  -- Небольшая задержка перед телепортацией
-                    
-                    humanoidRootPart.CFrame = beachBall.CFrame + Vector3.new(0, 3, 0)  -- Телепортация чуть выше объекта
-                    
-                    wait(0.2)  -- Задержка после телепортации
+                    humanoidRootPart.CFrame = beachBall.CFrame + Vector3.new(0, 3, 0)
                     freezeCharacter()
                 end
                 currentIndex = currentIndex + 1
@@ -137,6 +136,7 @@ Tabs.AutoFarm:AddToggle("AutoFarmLobby", {
         end
     end
 })
+
 Tabs.AutoFarm:AddToggle("AutoFarmPlaza", {
     Title = "AutoFarm Plaza Unit",
     Default = false,
