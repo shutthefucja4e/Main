@@ -22,13 +22,16 @@ local Tabs = {
     Settings = Window:AddTab({ Title = "Settings", Icon = "settings" })
 }
 
+local isAutoAcceptEnabled = false
+
 Tabs.Main:AddToggle("AutoAcceptTrades", {
     Title = "Auto Accept Trades",
     Default = false,
     Callback = function(Value)
+        isAutoAcceptEnabled = Value
         if Value then
             spawn(function()
-                while Tabs.Main.AutoAcceptTrades.Value do
+                while isAutoAcceptEnabled do
                     local args = {
                         [1] = {
                             [1] = {
@@ -46,6 +49,10 @@ Tabs.Main:AddToggle("AutoAcceptTrades", {
         end
     end
 })
+
+
+
+
 
 Tabs.Main:AddToggle("AutoSetupUnits", { Title = "Auto Setting up all Units (Trade)", Default = false })
 Tabs.Main:AddToggle("AutoScanPlayers", { Title = "Auto Scanning Players", Default = false })
