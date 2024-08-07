@@ -22,41 +22,13 @@ local Tabs = {
     Settings = Window:AddTab({ Title = "Settings", Icon = "settings" })
 }
 
-local speedSlider = Tabs.Main:AddSlider("AcceptTradeSpeed", {
-    Title = "Auto Accept Trade Speed",
-    Description = "Set the speed for auto accepting trades (in seconds)",
-    Default = 0.5,
-    Min = 0.1,
-    Max = 5,
-    Rounding = 1,
-    Callback = function(Value)
-        autoAcceptSpeed = Value
-    end
-})
-
-local autoAcceptSpeed = 0.5
-local isAutoAcceptEnabled = false
-
-local speedSlider = Tabs.Main:AddSlider("AcceptTradeSpeed", {
-    Title = "Auto Accept Trade Speed",
-    Description = "Set the speed for auto accepting trades (in seconds)",
-    Default = 0.5,
-    Min = 0.1,
-    Max = 5,
-    Rounding = 1,
-    Callback = function(Value)
-        autoAcceptSpeed = Value
-    end
-})
-
 Tabs.Main:AddToggle("AutoAcceptTrades", {
     Title = "Auto Accept Trades",
     Default = false,
     Callback = function(Value)
-        isAutoAcceptEnabled = Value
         if Value then
             spawn(function()
-                while isAutoAcceptEnabled do
+                while Tabs.Main.AutoAcceptTrades.Value do
                     local args = {
                         [1] = {
                             [1] = {
@@ -68,7 +40,7 @@ Tabs.Main:AddToggle("AutoAcceptTrades", {
                     }
                     
                     game:GetService("ReplicatedStorage"):WaitForChild("dataRemoteEvent"):FireServer(unpack(args))
-                    wait(autoAcceptSpeed)
+                    wait(0.5)
                 end
             end)
         end
