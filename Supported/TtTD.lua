@@ -59,32 +59,39 @@ Tabs.Main:AddToggle("AutoScanPlayers", { Title = "Auto Scanning Players", Defaul
 
 local UserInputService = game:GetService("UserInputService")
 
+local UserInputService = game:GetService("UserInputService")
+
 Tabs.AutoFarm:AddToggle("AutoFarmLobby", {
     Title = "AutoFarm Lobby Unit",
     Default = false,
     Callback = function(Value)
-        local beachBalls = {
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.BeachBall.BeachBallClicker,
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.BlueBeachBall.BeachBallClicker,
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.CyanBeachBall.BeachBallClicker,
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.DeepBlueBeachBall.BeachBallClicker,
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.GreenBeachBall.BeachBallClicker,
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.OrangeBeachBall.BeachBallClicker,
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.PinkBeachBall.BeachBallClicker,
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.PurpleBeachBall.BeachBallClicker,
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.RedBeachBall.BeachBallClicker,
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.YellowBeachBall.BeachBallClicker
-        }
+        local function findBeachBalls()
+            local beachBalls = {}
+            local addedFolders = {}
+            
+            for _, v in pairs(game.Workspace:GetDescendants()) do
+                if v.Name:match("Beachball LVL3%-4%.001") then
+                    local folder = v.Parent
+                    if not addedFolders[folder] then
+                        table.insert(beachBalls, v)
+                        addedFolders[folder] = true
+                    end
+                end
+            end
+            
+            return beachBalls
+        end
         
+        local beachBalls = findBeachBalls()
         local currentIndex = 1
         local isEnabled = Value
         local player = game.Players.LocalPlayer
         
         local function teleportToNextObject()
             if currentIndex <= #beachBalls and isEnabled then
-                local clicker = beachBalls[currentIndex]
-                if clicker then
-                    player.Character:SetPrimaryPartCFrame(clicker.CFrame)
+                local beachBall = beachBalls[currentIndex]
+                if beachBall then
+                    player.Character:SetPrimaryPartCFrame(beachBall.CFrame)
                     
                     -- Попытка зафиксировать персонажа
                     local humanoid = player.Character:FindFirstChild("Humanoid")
