@@ -25,8 +25,8 @@ do
     Fluent:Notify({
         Title = "Notification",
         Content = "This is a notification",
-        SubContent = "SubContent", -- Optional
-        Duration = 5 -- Set to nil to make the notification not disappear
+        SubContent = "SubContent",
+        Duration = 5
     })
 
 
