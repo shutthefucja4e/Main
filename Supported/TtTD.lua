@@ -60,6 +60,7 @@ Tabs.Main:AddToggle("AutoScanPlayers", { Title = "Auto Scanning Players", Defaul
 local UserInputService = game:GetService("UserInputService")
 
 local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
 
 Tabs.AutoFarm:AddToggle("AutoFarmLobby", {
     Title = "AutoFarm Lobby Unit",
@@ -86,19 +87,38 @@ Tabs.AutoFarm:AddToggle("AutoFarmLobby", {
         local currentIndex = 1
         local isEnabled = Value
         local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+        
+        local freezeConnection
+        
+        local function freezeCharacter()
+            if freezeConnection then freezeConnection:Disconnect() end
+            
+            local lastPosition = humanoidRootPart.CFrame
+            freezeConnection = RunService.Heartbeat:Connect(function()
+                humanoidRootPart.CFrame = lastPosition
+            end)
+        end
+        
+        local function unfreezeCharacter()
+            if freezeConnection then
+                freezeConnection:Disconnect()
+                freezeConnection = nil
+            end
+        end
         
         local function teleportToNextObject()
             if currentIndex <= #beachBalls and isEnabled then
                 local beachBall = beachBalls[currentIndex]
                 if beachBall then
-                    player.Character:SetPrimaryPartCFrame(beachBall.CFrame)
+                    unfreezeCharacter()
+                    wait(0.1)  -- Небольшая задержка перед телепортацией
                     
-                    -- Попытка зафиксировать персонажа
-                    local humanoid = player.Character:FindFirstChild("Humanoid")
-                    if humanoid then
-                        humanoid.WalkSpeed = 0
-                        humanoid.JumpPower = 0
-                    end
+                    humanoidRootPart.CFrame = beachBall.CFrame + Vector3.new(0, 3, 0)  -- Телепортация чуть выше объекта
+                    
+                    wait(0.2)  -- Задержка после телепортации
+                    freezeCharacter()
                 end
                 currentIndex = currentIndex + 1
             end
@@ -112,19 +132,11 @@ Tabs.AutoFarm:AddToggle("AutoFarmLobby", {
                 end
             end)
         else
-            if connection then
-                connection:Disconnect()
-            end
-            -- Возвращаем возможность двигаться
-            local humanoid = player.Character:FindFirstChild("Humanoid")
-            if humanoid then
-                humanoid.WalkSpeed = 16  -- стандартная скорость ходьбы
-                humanoid.JumpPower = 50  -- стандартная сила прыжка
-            end
+            if connection then connection:Disconnect() end
+            unfreezeCharacter()
         end
     end
 })
-
 Tabs.AutoFarm:AddToggle("AutoFarmPlaza", {
     Title = "AutoFarm Plaza Unit",
     Default = false,
