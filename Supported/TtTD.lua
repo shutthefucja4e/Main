@@ -22,7 +22,43 @@ local Tabs = {
     Settings = Window:AddTab({ Title = "Settings", Icon = "settings" })
 }
 
-Tabs.Main:AddToggle("AutoAcceptTrades", { Title = "Auto Accept Trades", Default = false })
+local speedSlider = Tabs.Main:AddSlider("AcceptTradeSpeed", {
+    Title = "Auto Accept Trade Speed",
+    Description = "Set the speed for auto accepting trades (in seconds)",
+    Default = 0.5,
+    Min = 0.1,
+    Max = 5,
+    Rounding = 1,
+    Callback = function(Value)
+        autoAcceptSpeed = Value
+    end
+})
+
+local autoAcceptTradesToggle = Tabs.Main:AddToggle("AutoAcceptTrades", {
+    Title = "Auto Accept Trades",
+    Default = false,
+    Callback = function(Value)
+        if Value then
+            spawn(function()
+                while autoAcceptTradesToggle.Value do
+                    local args = {
+                        [1] = {
+                            [1] = {
+                                [1] = "6330653861613934313165363436323139313866353835666434383833306561",
+                                [2] = true
+                            },
+                            [2] = "Iw"
+                        }
+                    }
+                    
+                    game:GetService("ReplicatedStorage"):WaitForChild("dataRemoteEvent"):FireServer(unpack(args))
+                    wait(autoAcceptSpeed)
+                end
+            end)
+        end
+    end
+})
+
 Tabs.Main:AddToggle("AutoSetupUnits", { Title = "Auto Setting up all Units (Trade)", Default = false })
 Tabs.Main:AddToggle("AutoScanPlayers", { Title = "Auto Scanning Players", Default = false })
 
