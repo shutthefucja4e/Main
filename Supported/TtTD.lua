@@ -156,26 +156,82 @@ Tabs.AutoFarm:AddToggle("AutoFarmPlaza", {
     Title = "AutoFarm Plaza Unit",
     Default = false,
     Callback = function(Value)
-        if Value then
-            local plazaBalls = {
-                game.Workspace.Worlds.TradingPlaza.HiddenBeachBalls.BeachBallMan.BeachBallClicker,
-                game.Workspace.Worlds.TradingPlaza.HiddenBeachBalls.BigBeachBall.BeachBallClicker,
-                game.Workspace.Worlds.TradingPlaza.HiddenBeachBalls.CheeseBall.BeachBallClicker,
-                game.Workspace.Worlds.TradingPlaza.HiddenBeachBalls.Egg.BeachBallClicker,
-                game.Workspace.Worlds.TradingPlaza.HiddenBeachBalls.EvilBeachBall.BeachBallClicker,
-                game.Workspace.Worlds.TradingPlaza.HiddenBeachBalls.GlitchedBeachBall.BeachBallClicker,
-                game.Workspace.Worlds.TradingPlaza.HiddenBeachBalls.GrassBeachBall.BeachBallClicker,
-                game.Workspace.Worlds.TradingPlaza.HiddenBeachBalls.RustyBeachBall.BeachBallClicker,
-                game.Workspace.Worlds.TradingPlaza.HiddenBeachBalls.ToxicBeachBall.BeachBallClicker,
-                game.Workspace.Worlds.TradingPlaza.HiddenBeachBalls.WideBeachBall.BeachBallClicker
-            }
+        local function findBeachBalls()
+            local beachBalls = {}
+            local addedFolders = {}
             
-            for _, clicker in ipairs(plazaBalls) do
-                if clicker and clicker:IsA("ClickDetector") then
-                    fireclickdetector(clicker)
+            for _, v in pairs(game.Workspace:GetDescendants()) do
+                if v.Name:match("Beachball LVL3%-4%.001") then
+                    local folder = v.Parent
+                    if not addedFolders[folder] then
+                        table.insert(beachBalls, v)
+                        addedFolders[folder] = true
+                    end
                 end
             end
-            wait(1)
+            
+            return beachBalls
+        end
+        
+        local beachBalls = findBeachBalls()
+        local currentIndex = 1
+        local isEnabled = Value
+        local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+        
+        local freezeConnection
+
+        local function freezeCharacter()
+            if freezeConnection then freezeConnection:Disconnect() end
+            
+            local lastPosition = humanoidRootPart.CFrame
+            freezeConnection = RunService.Heartbeat:Connect(function()
+                humanoidRootPart.CFrame = lastPosition
+            end)
+        end
+        
+        local function unfreezeCharacter()
+            if freezeConnection then
+                freezeConnection:Disconnect()
+                freezeConnection = nil
+            end
+        end
+        
+        local function teleportToPlaza()
+            local plazaZone = game.Workspace.Zones.PlazaZone
+            if plazaZone then
+                unfreezeCharacter()
+                player.Character:SetPrimaryPartCFrame(plazaZone.CFrame)
+            end
+        end
+        
+        local function teleportToNextObject()
+            if currentIndex <= #beachBalls and isEnabled then
+                local beachBall = beachBalls[currentIndex]
+                if beachBall then
+                    unfreezeCharacter()
+                    humanoidRootPart.CFrame = beachBall.CFrame + Vector3.new(0, 3, 0)
+                    freezeCharacter()
+                    currentIndex = currentIndex + 1
+                end
+            else
+                -- Если все объекты пройдены, телепортируемся в плазу
+                teleportToPlaza()
+                isEnabled = false  -- Отключаем функцию после телепортации в плазу
+            end
+        end
+        
+        local connection
+        if Value then
+            connection = UserInputService.InputBegan:Connect(function(input, gameProcessed)
+                if not gameProcessed and input.KeyCode == Enum.KeyCode.G then
+                    teleportToNextObject()
+                end
+            end)
+        else
+            if connection then connection:Disconnect() end
+            unfreezeCharacter()
         end
     end
 })
