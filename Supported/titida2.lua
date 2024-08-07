@@ -21,18 +21,19 @@ MainTab:CreateToggle({
    CurrentValue = false,
    Flag = "AutoAcceptTradesToggle",
    Callback = function(Value)
-      while Value do
-         local args = {
-            [1] = {
-               [1] = {
-                  [1] = tostring(os.time() * 1000 + math.random(1, 999)),
-                  [2] = true
-               },
-               [2] = "Iw"
-            }
-         }
-         game:GetService("ReplicatedStorage"):WaitForChild("dataRemoteEvent"):FireServer(unpack(args))
-         wait(0.5)
+      if Value then
+         spawn(function()
+            while Rayfield.Flags.AutoAcceptTradesToggle.Value do
+               local player = game.Players.LocalPlayer
+               local notificationFrame = player.PlayerGui.MainFrames.NotificationFrame.BigNotification.NotificationFrame
+               local acceptButton = player.PlayerGui.MainFrames.NotificationFrame.BigNotification.Buttons.YesButton
+
+               if notificationFrame.Visible and acceptButton.Visible then
+                  firesignal(acceptButton.MouseButton1Click)
+               end
+               wait(0.1)
+            end
+         end)
       end
    end,
 })
