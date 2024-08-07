@@ -65,6 +65,9 @@ local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+
 Tabs.AutoFarm:AddToggle("AutoFarmLobby", {
     Title = "AutoFarm Lobby Unit",
     Default = false,
@@ -111,6 +114,14 @@ Tabs.AutoFarm:AddToggle("AutoFarmLobby", {
             end
         end
         
+        local function teleportToPlaza()
+            local plazaZone = game.Workspace.Zones.PlazaZone
+            if plazaZone then
+                unfreezeCharacter()
+                player.Character:SetPrimaryPartCFrame(plazaZone.CFrame)
+            end
+        end
+        
         local function teleportToNextObject()
             if currentIndex <= #beachBalls and isEnabled then
                 local beachBall = beachBalls[currentIndex]
@@ -118,8 +129,12 @@ Tabs.AutoFarm:AddToggle("AutoFarmLobby", {
                     unfreezeCharacter()
                     humanoidRootPart.CFrame = beachBall.CFrame + Vector3.new(0, 3, 0)
                     freezeCharacter()
+                    currentIndex = currentIndex + 1
                 end
-                currentIndex = currentIndex + 1
+            else
+                -- Если все объекты пройдены, телепортируемся в плазу
+                teleportToPlaza()
+                isEnabled = false  -- Отключаем функцию после телепортации в плазу
             end
         end
         
