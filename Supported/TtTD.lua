@@ -57,30 +57,63 @@ Tabs.Main:AddToggle("AutoAcceptTrades", {
 Tabs.Main:AddToggle("AutoSetupUnits", { Title = "Auto Setting up all Units (Trade)", Default = false })
 Tabs.Main:AddToggle("AutoScanPlayers", { Title = "Auto Scanning Players", Default = false })
 
+local UserInputService = game:GetService("UserInputService")
+
 Tabs.AutoFarm:AddToggle("AutoFarmLobby", {
     Title = "AutoFarm Lobby Unit",
     Default = false,
     Callback = function(Value)
-        if Value then
-            local beachBalls = {
-                game.Workspace.Worlds.Lobby.HiddenBeachBalls.BeachBall.BeachBallClicker,
-                game.Workspace.Worlds.Lobby.HiddenBeachBalls.BlueBeachBall.BeachBallClicker,
-                game.Workspace.Worlds.Lobby.HiddenBeachBalls.CyanBeachBall.BeachBallClicker,
-                game.Workspace.Worlds.Lobby.HiddenBeachBalls.DeepBlueBeachBall.BeachBallClicker,
-                game.Workspace.Worlds.Lobby.HiddenBeachBalls.GreenBeachBall.BeachBallClicker,
-                game.Workspace.Worlds.Lobby.HiddenBeachBalls.OrangeBeachBall.BeachBallClicker,
-                game.Workspace.Worlds.Lobby.HiddenBeachBalls.PinkBeachBall.BeachBallClicker,
-                game.Workspace.Worlds.Lobby.HiddenBeachBalls.PurpleBeachBall.BeachBallClicker,
-                game.Workspace.Worlds.Lobby.HiddenBeachBalls.RedBeachBall.BeachBallClicker,
-                game.Workspace.Worlds.Lobby.HiddenBeachBalls.YellowBeachBall.BeachBallClicker
-            }
-            
-            for _, clicker in ipairs(beachBalls) do
-                if clicker and clicker:IsA("ClickDetector") then
-                    fireclickdetector(clicker)
+        local beachBalls = {
+            game.Workspace.Worlds.Lobby.HiddenBeachBalls.BeachBall.BeachBallClicker,
+            game.Workspace.Worlds.Lobby.HiddenBeachBalls.BlueBeachBall.BeachBallClicker,
+            game.Workspace.Worlds.Lobby.HiddenBeachBalls.CyanBeachBall.BeachBallClicker,
+            game.Workspace.Worlds.Lobby.HiddenBeachBalls.DeepBlueBeachBall.BeachBallClicker,
+            game.Workspace.Worlds.Lobby.HiddenBeachBalls.GreenBeachBall.BeachBallClicker,
+            game.Workspace.Worlds.Lobby.HiddenBeachBalls.OrangeBeachBall.BeachBallClicker,
+            game.Workspace.Worlds.Lobby.HiddenBeachBalls.PinkBeachBall.BeachBallClicker,
+            game.Workspace.Worlds.Lobby.HiddenBeachBalls.PurpleBeachBall.BeachBallClicker,
+            game.Workspace.Worlds.Lobby.HiddenBeachBalls.RedBeachBall.BeachBallClicker,
+            game.Workspace.Worlds.Lobby.HiddenBeachBalls.YellowBeachBall.BeachBallClicker
+        }
+        
+        local currentIndex = 1
+        local isEnabled = Value
+        local player = game.Players.LocalPlayer
+        
+        local function teleportToNextObject()
+            if currentIndex <= #beachBalls and isEnabled then
+                local clicker = beachBalls[currentIndex]
+                if clicker then
+                    player.Character:SetPrimaryPartCFrame(clicker.CFrame)
+                    
+                    -- Попытка зафиксировать персонажа
+                    local humanoid = player.Character:FindFirstChild("Humanoid")
+                    if humanoid then
+                        humanoid.WalkSpeed = 0
+                        humanoid.JumpPower = 0
+                    end
                 end
+                currentIndex = currentIndex + 1
             end
-            wait(1)
+        end
+        
+        local connection
+        if Value then
+            connection = UserInputService.InputBegan:Connect(function(input, gameProcessed)
+                if not gameProcessed and input.KeyCode == Enum.KeyCode.G then
+                    teleportToNextObject()
+                end
+            end)
+        else
+            if connection then
+                connection:Disconnect()
+            end
+            -- Возвращаем возможность двигаться
+            local humanoid = player.Character:FindFirstChild("Humanoid")
+            if humanoid then
+                humanoid.WalkSpeed = 16  -- стандартная скорость ходьбы
+                humanoid.JumpPower = 50  -- стандартная сила прыжка
+            end
         end
     end
 })
