@@ -201,29 +201,6 @@ Tabs.AutoFarm:AddToggle("AutoFarmPlaza", {
                 player.Character:SetPrimaryPartCFrame(plazaZone.CFrame)
             end
         end
-
-        local function generateRandomHash()
-            local characters = "0123456789abcdef"
-            local hash = ""
-            for i = 1, 64 do
-                local randomIndex = math.random(1, #characters)
-                hash = hash .. string.sub(characters, randomIndex, randomIndex)
-            end
-            return hash
-        end
-        
-        local function fireRemoteEvent()
-            local args = {
-                [1] = {
-                    [1] = {
-                        [1] = generateRandomHash(),
-                        [2] = player
-                    },
-                    [2] = "Pd"
-                }
-            }
-            game:GetService("ReplicatedStorage").dataRemoteEvent:FireServer(unpack(args))
-        end
         
         local function teleportToNextObject()
             if currentIndex <= #beachBalls and isEnabled then
@@ -236,7 +213,6 @@ Tabs.AutoFarm:AddToggle("AutoFarmPlaza", {
                 end
             else
                 -- Если все объекты пройдены, телепортируемся в плазу
-                fireRemoteEvent()
                 isEnabled = false  -- Отключаем функцию после телепортации в плазу
             end
         end
@@ -254,6 +230,7 @@ Tabs.AutoFarm:AddToggle("AutoFarmPlaza", {
         end
     end
 })
+
 
 Tabs.AutoFarm:AddToggle("AutoBuy", { Title = "AutoBuy", Default = false })
 Tabs.AutoFarm:AddToggle("AutoSell", { Title = "AutoSell", Default = false })
