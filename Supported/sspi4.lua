@@ -3,8 +3,6 @@ local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/s
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/shutthefucja4e/Main/main/ui/InterfaceManager.lua"))()
 local ESP = loadstring(game:HttpGet("https://raw.githubusercontent.com/shutthefucja4e/Main/main/esp/ESP.lua"))()
 
-warn("StedHub -> Loaded! (✅)")
-
 local Window = Fluent:CreateWindow({
     Title = "StedHub -> SCP",
     SubTitle = "Free Version (Executor Supported)",
@@ -30,14 +28,118 @@ local SilentAimSection = MainTab:AddSection("Silent Aim")
 
 local SilentAimEnabled = SilentAimSection:AddToggle("SilentAimEnabled", {Title = "Enable Silent Aim", Default = false })
 
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+
+local localPlayer = Players.LocalPlayer
+
+local function hasGun(character)
+    for _, tool in ipairs(character:GetChildren()) do
+        if tool:IsA("Tool") and tool:FindFirstChild("Laser") then
+            return true
+        end
+    end
+    return false
+end
+
+local function isAgainst(otherPlayer)
+    local playerTeamName = localPlayer.Team.Name
+    local otherTeamName = otherPlayer.Team.Name
+    local character = otherPlayer.Character
+
+    if playerTeamName == "Class - D" or playerTeamName == "Chaos Insurgency" then
+        if otherTeamName ~= "Class - D" and otherTeamName ~= "Chaos Insurgency" then
+            if character.Head:FindFirstChild("Rogue") then
+                return false
+            else
+                return true
+            end
+        else
+            if character.HumanoidRootPart.BrickColor == BrickColor.new("Olivine") or character.LeftUpperArm:FindFirstChild("Crystal") then
+                return true
+            end
+        end
+    else
+        if otherTeamName == "Class - D" then
+            if hasGun(character) or character.HumanoidRootPart.BrickColor == BrickColor.new("Olivine") or character.LeftUpperArm:FindFirstChild("Crystal") then
+                return true
+            end
+        elseif otherTeamName == "Chaos Insurgency" then
+            return true
+        elseif character.HumanoidRootPart.BrickColor == BrickColor.new("Olivine") or character.LeftUpperArm:FindFirstChild("Crystal") then
+            return true
+        end
+    end
+    return false
+end
+
+local function findNearestPlayer()
+    local nearestPlayer = nil
+    local shortestDistance = 300
+    for _, player in pairs(Players:GetPlayers()) do
+        if player ~= localPlayer and player.Character and player.Character:FindFirstChild("Head") and player.Team ~= localPlayer.Team and player.Character:FindFirstChild("Humanoid").Health ~= 0 then
+            if isAgainst(player) then
+                local distance = (player.Character.Head.Position - localPlayer.Character.Head.Position).Magnitude
+                if distance < shortestDistance then
+                    nearestPlayer = player
+                    shortestDistance = distance
+                end
+            end
+        end
+    end
+    return nearestPlayer
+end
+
+local function shootNearestPlayer()
+    local nearestPlayer = findNearestPlayer()
+
+    if nearestPlayer and isAgainst(nearestPlayer) and nearestPlayer.Character and nearestPlayer.Character:FindFirstChild("Head") and nearestPlayer.Character:FindFirstChild("Humanoid") and nearestPlayer.Character.Humanoid.Health > 0 then
+        local args = {
+            [1] = {
+                [1] = 0,
+                [2] = 0,
+                [3] = 0
+            },
+            [2] = nearestPlayer.Character.Head
+        }
+        ReplicatedStorage.Remotes.ShotRemote:FireServer(unpack(args))
+    end
+end
+
+local function freezeAmmo()
+    local glock = localPlayer.Backpack:WaitForChild("Glock 17")
+    local currentAmmo = glock:WaitForChild("CurrentAmmo")
+    local originalValue = currentAmmo.Value
+
+    currentAmmo:GetPropertyChangedSignal("Value"):Connect(function()
+        currentAmmo.Value = originalValue
+    end)
+end
+
+local function equipGlock17()
+    if not localPlayer.Character:FindFirstChild("Glock 17") then
+        ReplicatedStorage.Remotes.Jerry:FireServer("Glock 17")
+        local glock = localPlayer.Backpack:WaitForChild("Glock 17")
+        glock.Parent = localPlayer.Character
+        freezeAmmo()
+    end
+end
+
 local function implementSilentAim()
-    
+    RunService.Heartbeat:Connect(function()
+        pcall(function()
+            if SilentAimEnabled.Value then
+                equipGlock17()
+                shootNearestPlayer()
+            end
+        end)
+    end)
 end
 
 SilentAimEnabled:OnChanged(function()
     if SilentAimEnabled.Value then
         implementSilentAim()
-    else
     end
 end)
 
@@ -72,11 +174,41 @@ ShowTracers:OnChanged(function()
     ESP.Tracers = ShowTracers.Value
 end)
 
-SCPESP:OnChanged(function()
+local scpObjects = {
+    "SCP-173", "SCP-999", "SCP-966", "SCP-457", "SCP-2950",
+    "SCP-131", "SCP-1299", "SCP-1025", "SCP-087", "SCP-079",
+    "SCP-066", "SCP-049", "SCP-023", "SCP-008", "SCP-002"
+}
 
+ESP:AddObjectListener(game.Workspace.SCPs, {
+    Type = "Model",
+    CustomName = function(obj)
+        return obj.Name
+    end,
+    Color = Color3.fromRGB(255, 0, 0),
+    IsEnabled = "SCPESP"
+})
+
+SCPESP:OnChanged(function()
+    ESP.SCPESP = SCPESP.Value
 end)
 
 local OtherTab = Window:AddTab({ Title = "Other", Icon = "rbxassetid://10734949856" })
+
+local function DestroyEverything()
+    for _, v in pairs(workspace:GetDescendants()) do
+        if v:IsA("BasePart") and v.Anchored then
+            if not v:IsDescendantOf(game.Players.LocalPlayer.Character) and 
+               v.Name ~= "Base" and 
+               v.Name ~= "Baseplate" and 
+               v.Name ~= "Terrain" then
+                if not (v.Name == "Part" and math.abs(v.Position.Y - 19.35) < 0.01) then
+                    v:Destroy()
+                end
+            end
+        end
+    end
+end
 
 OtherTab:AddButton({
     Title = "Destroy Everything",
@@ -84,6 +216,17 @@ OtherTab:AddButton({
         DestroyEverything()
     end
 })
+
+local function InfiniteAmmo()
+    while true do
+        for _, item in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+            if item:FindFirstChild("CurrentAmmo") then
+                item.CurrentAmmo.Value = 9999
+            end
+        end
+        wait(0.1)
+    end
+end
 
 OtherTab:AddButton({
     Title = "Infinity Ammo",
@@ -102,20 +245,24 @@ OtherTab:AddButton({
 local WalkSpeedSection = OtherTab:AddSection("WalkSpeed")
 
 local WalkSpeedEnabled = WalkSpeedSection:AddToggle("WalkSpeedEnabled", {Title = "Enable WalkSpeed", Default = false })
-local WalkSpeedValue = WalkSpeedSection:AddSlider("WalkSpeed", {Title = "Speed", Default = 16, Min = 16, Max = 100, Rounding = 0, Callback = function(Value) end})
+local WalkSpeedValue = WalkSpeedSection:AddSlider("WalkSpeed", {Title = "Speed", Default = 1, Min = 0, Max = 10, Rounding = 1, Callback = function(Value) end})
+
+getgenv().WalkSpeed = false
 
 WalkSpeedEnabled:OnChanged(function()
+    getgenv().WalkSpeed = WalkSpeedEnabled.Value
     if WalkSpeedEnabled.Value then
-        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WalkSpeedValue.Value
-    else
-        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
+        spawn(function()
+            while getgenv().WalkSpeed do
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.lookVector * WalkSpeedValue.Value
+                wait()
+            end
+        end)
     end
 end)
 
 WalkSpeedValue:OnChanged(function()
-    if WalkSpeedEnabled.Value then
-        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = WalkSpeedValue.Value
-    end
+    -- automatically
 end)
 
 OtherTab:AddButton({
@@ -127,13 +274,45 @@ OtherTab:AddButton({
 
 local ChatSpySection = OtherTab:AddSection("Chat Spy")
 
-
 local FarmTab = Window:AddTab({ Title = "Farm", Icon = "rbxassetid://10734950020" })
 
-FarmTab:AddButton({
+local farmingEscapes = false
+
+local function FarmEscapes()
+    local player = game.Players.LocalPlayer
+    
+    local function teleportToHelipad()
+        local character = player.Character
+        if character then
+            local humanoidRootPart = character:WaitForChild("HumanoidRootPart", 5)
+            if humanoidRootPart then
+                humanoidRootPart.CFrame = CFrame.new(-883.641, 12.211, 11.987)
+            end
+        end
+    end
+    
+    local function onCharacterAdded(newCharacter)
+        if farmingEscapes then
+            wait(2)
+            teleportToHelipad()
+        end
+    end
+    
+    player.CharacterAdded:Connect(onCharacterAdded)
+    
+    if player.Character then
+        teleportToHelipad()
+    end
+end
+
+FarmTab:AddToggle("FarmEscapesToggle", {
     Title = "Farm Escapes",
-    Callback = function()
-        FarmEscapes()
+    Default = false,
+    Callback = function(Value)
+        farmingEscapes = Value
+        if Value then
+            FarmEscapes()
+        end
     end
 })
 
