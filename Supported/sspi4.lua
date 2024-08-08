@@ -3,6 +3,8 @@ local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/s
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/shutthefucja4e/Main/main/ui/InterfaceManager.lua"))()
 local ESP = loadstring(game:HttpGet("https://raw.githubusercontent.com/shutthefucja4e/Main/main/esp/ESP.lua"))()
 
+warn("StedHub -> Loaded! (✅)")
+
 local Window = Fluent:CreateWindow({
     Title = "SCP RolePlay",
     SubTitle = "Free Version (Executor Supported)",
