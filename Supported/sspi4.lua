@@ -6,7 +6,7 @@ local ESP = loadstring(game:HttpGet("https://raw.githubusercontent.com/shutthefu
 warn("StedHub -> Loaded! (✅)")
 
 local Window = Fluent:CreateWindow({
-    Title = "SCP RolePlay",
+    Title = "StedHub -> SCP",
     SubTitle = "Free Version (Executor Supported)",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
