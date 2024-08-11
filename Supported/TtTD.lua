@@ -114,7 +114,11 @@ Tabs.AutoFarm:AddToggle("AutoFarmLobby", {
             end
             
             local function teleportToPlaza()
-                game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("/plaza", "All")
+                local plazaZone = game.Workspace.Zones.PlazaZone
+                if plazaZone then
+                    unfreezeCharacter()
+                    player.Character:SetPrimaryPartCFrame(plazaZone.CFrame)
+                end
             end
             
             local function teleportToNextObject()
