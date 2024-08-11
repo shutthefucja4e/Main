@@ -9,7 +9,7 @@ local Window = Fluent:CreateWindow({
     Size = UDim2.fromOffset(580, 460),
     Acrylic = true,
     Theme = "Dark",
-    MinimizeKey = Enum.KeyCode.LeftControl
+    MinimizeKey = Enum.KeyCode.RightShift
 })
 
 local Tabs = {
@@ -66,7 +66,7 @@ local RunService = game:GetService("RunService")
 
 Tabs.AutoFarm:AddToggle("AutoFarmLobby", {
     Title = "AutoFarm Lobby Unit",
-    Default = false,
+    Default = true,
     Callback = function(Value)
         local function findBeachBalls()
             local beachBalls = {}
@@ -150,7 +150,7 @@ Tabs.AutoFarm:AddToggle("AutoFarmLobby", {
 
 Tabs.AutoFarm:AddToggle("AutoFarmPlaza", {
     Title = "AutoFarm Plaza Unit",
-    Default = false,
+    Default = true,
     Callback = function(Value)
         local function findBeachBalls()
             local beachBalls = {}
