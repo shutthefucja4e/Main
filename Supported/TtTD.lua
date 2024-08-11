@@ -64,169 +64,173 @@ local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 
+local gameId = game.PlaceId
+
 Tabs.AutoFarm:AddToggle("AutoFarmLobby", {
     Title = "AutoFarm Lobby Unit",
-    Default = true,
+    Default = gameId == 13775256536,
     Callback = function(Value)
-        local function findBeachBalls()
-            local beachBalls = {}
-            local addedFolders = {}
-            
-            for _, v in pairs(game.Workspace:GetDescendants()) do
-                if v.Name:match("Beachball LVL3%-4%.001") then
-                    local folder = v.Parent
-                    if not addedFolders[folder] then
-                        table.insert(beachBalls, v)
-                        addedFolders[folder] = true
+        if gameId == 13775256536 then
+            local function findBeachBalls()
+                local beachBalls = {}
+                local addedFolders = {}
+                
+                for _, v in pairs(game.Workspace:GetDescendants()) do
+                    if v.Name:match("Beachball LVL3%-4%.001") then
+                        local folder = v.Parent
+                        if not addedFolders[folder] then
+                            table.insert(beachBalls, v)
+                            addedFolders[folder] = true
+                        end
                     end
                 end
+                
+                return beachBalls
             end
             
-            return beachBalls
-        end
-        
-        local beachBalls = findBeachBalls()
-        local currentIndex = 1
-        local isEnabled = Value
-        local player = game.Players.LocalPlayer
-        local character = player.Character or player.CharacterAdded:Wait()
-        local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-        
-        local freezeConnection
+            local beachBalls = findBeachBalls()
+            local currentIndex = 1
+            local isEnabled = Value
+            local player = game.Players.LocalPlayer
+            local character = player.Character or player.CharacterAdded:Wait()
+            local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+            
+            local freezeConnection
 
-        local function freezeCharacter()
-            if freezeConnection then freezeConnection:Disconnect() end
+            local function freezeCharacter()
+                if freezeConnection then freezeConnection:Disconnect() end
+                
+                local lastPosition = humanoidRootPart.CFrame
+                freezeConnection = RunService.Heartbeat:Connect(function()
+                    humanoidRootPart.CFrame = lastPosition
+                end)
+            end
             
-            local lastPosition = humanoidRootPart.CFrame
-            freezeConnection = RunService.Heartbeat:Connect(function()
-                humanoidRootPart.CFrame = lastPosition
-            end)
-        end
-        
-        local function unfreezeCharacter()
-            if freezeConnection then
-                freezeConnection:Disconnect()
-                freezeConnection = nil
-            end
-        end
-        
-        local function teleportToPlaza()
-            local plazaZone = game.Workspace.Zones.PlazaZone
-            if plazaZone then
-                unfreezeCharacter()
-                player.Character:SetPrimaryPartCFrame(plazaZone.CFrame)
-            end
-        end
-        
-        local function teleportToNextObject()
-            if currentIndex <= #beachBalls and isEnabled then
-                local beachBall = beachBalls[currentIndex]
-                if beachBall then
-                    unfreezeCharacter()
-                    humanoidRootPart.CFrame = beachBall.CFrame + Vector3.new(0, 3, 0)
-                    freezeCharacter()
-                    currentIndex = currentIndex + 1
+            local function unfreezeCharacter()
+                if freezeConnection then
+                    freezeConnection:Disconnect()
+                    freezeConnection = nil
                 end
+            end
+            
+            local function teleportToPlaza()
+                game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("/plaza", "All")
+            end
+            
+            local function teleportToNextObject()
+                if currentIndex <= #beachBalls and isEnabled then
+                    local beachBall = beachBalls[currentIndex]
+                    if beachBall then
+                        unfreezeCharacter()
+                        humanoidRootPart.CFrame = beachBall.CFrame + Vector3.new(0, 3, 0)
+                        freezeCharacter()
+                        currentIndex = currentIndex + 1
+                    end
+                else
+                    teleportToPlaza()
+                    isEnabled = false
+                end
+            end
+            
+            local connection
+            if Value then
+                connection = UserInputService.InputBegan:Connect(function(input, gameProcessed)
+                    if not gameProcessed and input.KeyCode == Enum.KeyCode.G then
+                        teleportToNextObject()
+                    end
+                end)
             else
-                -- Если все объекты пройдены, телепортируемся в плазу
-                teleportToPlaza()
-                isEnabled = false  -- Отключаем функцию после телепортации в плазу
+                if connection then connection:Disconnect() end
+                unfreezeCharacter()
             end
-        end
-        
-        local connection
-        if Value then
-            connection = UserInputService.InputBegan:Connect(function(input, gameProcessed)
-                if not gameProcessed and input.KeyCode == Enum.KeyCode.G then
-                    teleportToNextObject()
-                end
-            end)
         else
-            if connection then connection:Disconnect() end
-            unfreezeCharacter()
+            print("AutoFarmLobby доступен только в игре с ID 13775256536")
         end
     end
 })
 
 Tabs.AutoFarm:AddToggle("AutoFarmPlaza", {
     Title = "AutoFarm Plaza Unit",
-    Default = true,
+    Default = gameId == 14682939953,
     Callback = function(Value)
-        local function findBeachBalls()
-            local beachBalls = {}
-            local addedFolders = {}
-            
-            for _, v in pairs(game.Workspace:GetDescendants()) do
-                if v.Name:match("Beachball LVL3%-4%.001") then
-                    local folder = v.Parent
-                    if not addedFolders[folder] then
-                        table.insert(beachBalls, v)
-                        addedFolders[folder] = true
+        if gameId == 14682939953 then
+            local function findBeachBalls()
+                local beachBalls = {}
+                local addedFolders = {}
+                
+                for _, v in pairs(game.Workspace:GetDescendants()) do
+                    if v.Name:match("Beachball LVL3%-4%.001") then
+                        local folder = v.Parent
+                        if not addedFolders[folder] then
+                            table.insert(beachBalls, v)
+                            addedFolders[folder] = true
+                        end
                     end
                 end
+                
+                return beachBalls
             end
             
-            return beachBalls
-        end
-        
-        local beachBalls = findBeachBalls()
-        local currentIndex = 1
-        local isEnabled = Value
-        local player = game.Players.LocalPlayer
-        local character = player.Character or player.CharacterAdded:Wait()
-        local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-        
-        local freezeConnection
+            local beachBalls = findBeachBalls()
+            local currentIndex = 1
+            local isEnabled = Value
+            local player = game.Players.LocalPlayer
+            local character = player.Character or player.CharacterAdded:Wait()
+            local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+            
+            local freezeConnection
 
-        local function freezeCharacter()
-            if freezeConnection then freezeConnection:Disconnect() end
+            local function freezeCharacter()
+                if freezeConnection then freezeConnection:Disconnect() end
+                
+                local lastPosition = humanoidRootPart.CFrame
+                freezeConnection = RunService.Heartbeat:Connect(function()
+                    humanoidRootPart.CFrame = lastPosition
+                end)
+            end
             
-            local lastPosition = humanoidRootPart.CFrame
-            freezeConnection = RunService.Heartbeat:Connect(function()
-                humanoidRootPart.CFrame = lastPosition
-            end)
-        end
-        
-        local function unfreezeCharacter()
-            if freezeConnection then
-                freezeConnection:Disconnect()
-                freezeConnection = nil
+            local function unfreezeCharacter()
+                if freezeConnection then
+                    freezeConnection:Disconnect()
+                    freezeConnection = nil
+                end
             end
-        end
-        
-        local function teleportToPlaza()
-            local plazaZone = game.Workspace.Zones.PlazaZone
-            if plazaZone then
-                unfreezeCharacter()
-                player.Character:SetPrimaryPartCFrame(plazaZone.CFrame)
-            end
-        end
-        
-        local function teleportToNextObject()
-            if currentIndex <= #beachBalls and isEnabled then
-                local beachBall = beachBalls[currentIndex]
-                if beachBall then
+            
+            local function teleportToPlaza()
+                local plazaZone = game.Workspace.Zones.PlazaZone
+                if plazaZone then
                     unfreezeCharacter()
-                    humanoidRootPart.CFrame = beachBall.CFrame + Vector3.new(0, 3, 0)
-                    freezeCharacter()
-                    currentIndex = currentIndex + 1
+                    player.Character:SetPrimaryPartCFrame(plazaZone.CFrame)
                 end
-            else
-                -- Если все объекты пройдены, телепортируемся в плазу
-                isEnabled = false  -- Отключаем функцию после телепортации в плазу
             end
-        end
-        
-        local connection
-        if Value then
-            connection = UserInputService.InputBegan:Connect(function(input, gameProcessed)
-                if not gameProcessed and input.KeyCode == Enum.KeyCode.G then
-                    teleportToNextObject()
+            
+            local function teleportToNextObject()
+                if currentIndex <= #beachBalls and isEnabled then
+                    local beachBall = beachBalls[currentIndex]
+                    if beachBall then
+                        unfreezeCharacter()
+                        humanoidRootPart.CFrame = beachBall.CFrame + Vector3.new(0, 3, 0)
+                        freezeCharacter()
+                        currentIndex = currentIndex + 1
+                    end
+                else
+                    isEnabled = false
                 end
-            end)
+            end
+            
+            local connection
+            if Value then
+                connection = UserInputService.InputBegan:Connect(function(input, gameProcessed)
+                    if not gameProcessed and input.KeyCode == Enum.KeyCode.G then
+                        teleportToNextObject()
+                    end
+                end)
+            else
+                if connection then connection:Disconnect() end
+                unfreezeCharacter()
+            end
         else
-            if connection then connection:Disconnect() end
-            unfreezeCharacter()
+            print("AutoFarmPlaza доступен только в игре с ID 14682939953")
         end
     end
 })
