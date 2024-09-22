@@ -62,26 +62,45 @@ AutoFarmTab:CreateToggle({
    CurrentValue = false,
    Flag = "AutoFarmLobbyToggle",
    Callback = function(Value)
-      while Value do
-         local beachBalls = {
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.BeachBall.BeachBallClicker,
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.BlueBeachBall.BeachBallClicker,
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.CyanBeachBall.BeachBallClicker,
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.DeepBlueBeachBall.BeachBallClicker,
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.GreenBeachBall.BeachBallClicker,
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.OrangeBeachBall.BeachBallClicker,
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.PinkBeachBall.BeachBallClicker,
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.PurpleBeachBall.BeachBallClicker,
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.RedBeachBall.BeachBallClicker,
-            game.Workspace.Worlds.Lobby.HiddenBeachBalls.YellowBeachBall.BeachBallClicker
-         }
-         
-         for _, clicker in ipairs(beachBalls) do
-            if clicker and clicker:IsA("ClickDetector") then
-                fireclickdetector(clicker)
+      if Value then
+         spawn(function()
+            while Rayfield.Flags.AutoFarmLobbyToggle.Value do
+               local beachBalls = {
+                  game.Workspace.Worlds.Lobby.HiddenBeachBalls.BeachBall.BeachBallClicker,
+                  game.Workspace.Worlds.Lobby.HiddenBeachBalls.BlueBeachBall.BeachBallClicker,
+                  game.Workspace.Worlds.Lobby.HiddenBeachBalls.CyanBeachBall.BeachBallClicker,
+                  game.Workspace.Worlds.Lobby.HiddenBeachBalls.DeepBlueBeachBall.BeachBallClicker,
+                  game.Workspace.Worlds.Lobby.HiddenBeachBalls.GreenBeachBall.BeachBallClicker,
+                  game.Workspace.Worlds.Lobby.HiddenBeachBalls.OrangeBeachBall.BeachBallClicker,
+                  game.Workspace.Worlds.Lobby.HiddenBeachBalls.PinkBeachBall.BeachBallClicker,
+                  game.Workspace.Worlds.Lobby.HiddenBeachBalls.PurpleBeachBall.BeachBallClicker,
+                  game.Workspace.Worlds.Lobby.HiddenBeachBalls.RedBeachBall.BeachBallClicker,
+                  game.Workspace.Worlds.Lobby.HiddenBeachBalls.YellowBeachBall.BeachBallClicker
+               }
+               
+               for _, clicker in ipairs(beachBalls) do
+                  if clicker and clicker:IsA("ClickDetector") then
+                      fireclickdetector(clicker)
+                  end
+               end
+               wait(1)
             end
+         end)
+         
+         -- Добавляем задержку в 500 миллисекунд перед телепортацией
+         wait(0.5)
+         
+         -- Телепортация на Plaza
+         local plazaZone = game.Workspace.Zones.PlazaZone
+         if plazaZone then
+            game.Players.LocalPlayer.Character:SetPrimaryPartCFrame(plazaZone.CFrame)
+         else
+            Rayfield:Notify({
+               Title = "Ошибка",
+               Content = "PlazaZone не найдена",
+               Duration = 3,
+            })
          end
-         wait(1)
       end
    end,
 })
